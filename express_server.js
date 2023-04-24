@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const port = 8080;
 
-//set view engine for ejs
+//set view engine for ejs, tells the Express app to use EJS as its templating engine
 app.set('view engine', 'ejs');
 
 
@@ -11,17 +11,27 @@ const urlDatabase = {
   "9sm5xK": "http://www.google.com"
 };
 
-//create root route / returns hello on the / route
+//create root route '/' returns hello on the / route
 app.get('/', (req, res) => {
   res.send('Hello');
 });
 
-// creare route /urls.json to send the db to the /urls.json route
+// create '/urls' route passing url data to 'urls_index 'template, When sending variables to an EJS template, we need to send them inside an object, even if we are only sending one variable. This is so we can use the key of that variable (in the below case the key is urls) to access the data within our template.
+app.get('/urls', (req, res) => {
+  const templateVars = {
+    urls: urlDatabase
+  };
+  res.render('urls_index', templateVars);
+});
+
+
+
+// creare route '/urls.json' to send the db to the '/urls.json' route
 app.get('/urls.json', (req, res) => {
   res.json(urlDatabase);
 });
 
-//create route /hello returns html on /hello route
+//create route '/hello' returns html on /hello route
 app.get('/hello', (req, res) => {
   res.send("<html><body>Hello <b>World</b></body></html>\n");
 });
